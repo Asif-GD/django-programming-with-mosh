@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+# ensures that the specifies the correct MIME type when serving the js files.
+# added this because Django Debug Toolbar wasn't being displayed even after it was loaded in the HTML
+# source - https://forum.codewithmosh.com/t/issue-with-django-debug-toolbar/6452/4
+# source - https://dev.to/tipu/django-debug-toolbar-not-showing-appearing-fix-it-bring-it-back-ofo
+import mimetypes
+mimetypes.add_type("application/javascript", ".js", True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +33,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+    # "192.168.0.194",
+]
 
 # Application definition
 
@@ -36,10 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'playground'
+    "playground",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
